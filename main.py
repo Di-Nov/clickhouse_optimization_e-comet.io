@@ -9,11 +9,10 @@ from sql_queries.create_tables import create_products, create_remainders
 
 load_dotenv()
 
-
+#
 def main(client_clickhouse):
-    create_products_table = clickhouse.create_table(client=client_clickhouse, sql_queries=create_products)
-    create_remainders_table = clickhouse.create_table(client=client_clickhouse, sql_queries=create_remainders)
-    insert_data = clickhouse.import_data()
+    clickhouse.create_table(client=client_clickhouse, sql_queries=create_products)
+    clickhouse.create_table(client=client_clickhouse, sql_queries=create_remainders)
 
 
 if __name__ == '__main__':

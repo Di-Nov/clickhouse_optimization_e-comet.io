@@ -1,5 +1,4 @@
-create_products = '''
-CREATE TABLE products
+create_products = '''CREATE TABLE products
 (
     product_id   Int32,
     product_name String,
@@ -8,12 +7,10 @@ CREATE TABLE products
     updated      Date
 )
     ENGINE = ReplacingMergeTree
-    ORDER BY product_id;
-    '''
+    ORDER BY product_id;'''
 
 
-create_remainders = '''
-CREATE TABLE remainders
+create_remainders = '''CREATE TABLE remainders
 (
     date       Date,
     product_id Int32,
@@ -26,5 +23,4 @@ CREATE TABLE remainders
     new        Bool
 )
     ENGINE = ReplacingMergeTree
-    ORDER BY (date, product_id);
-    '''
+    ORDER BY (date, product_id);'''

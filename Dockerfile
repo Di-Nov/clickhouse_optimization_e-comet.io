@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -13,4 +13,4 @@ RUN pip --no-cache-dir install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT main.py
+CMD ["python", "/app/main.py"]
