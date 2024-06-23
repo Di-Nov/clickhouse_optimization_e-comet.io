@@ -1,23 +1,25 @@
-version: '3.8'
+version: '3'
 
 services:
   clickhouse:
     container_name: clickhouse
     image: bitnami/clickhouse:latest
+    env_file:
+      - .env
     environment:
       - CLICKHOUSE_ADMIN_PASSWORD=${CLICKHOUSE_PASSWORD}
     ports:
       - "8123:8123"
     volumes:
-      - /path/to/clickhouse-persistence:/bitnami/clickhouse
+      - clickhouse_data:/bitnami/clickhouse
     networks:
       - my-network
 
   load_data:
     build: .
     container_name: load_data
-    volumes:
-      - data:/app/data
+#    volumes:
+#      - data:/app/data
     networks:
       - my-network
     depends_on:
@@ -28,4 +30,4 @@ services:
 networks:
   my-network:
 volumes:
-  data:
+  clickhouse_data:
