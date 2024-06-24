@@ -9,7 +9,7 @@ services:
     environment:
       - CLICKHOUSE_ADMIN_PASSWORD=${CLICKHOUSE_PASSWORD}
     ports:
-      - "8123:8123"
+      - "9000:9000"
     volumes:
       - clickhouse_data:/bitnami/clickhouse
     networks:
@@ -24,7 +24,7 @@ services:
       - my-network
     depends_on:
       - clickhouse
-    restart: always
+#    restart: always
 
 
 networks:
