@@ -8,9 +8,9 @@ packages = [{include = "clickhouse_optimization_e_comet"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-clickhouse-arrow = "^0.4.0"
 faker = "^25.9.1"
 python-dotenv = "^1.0.1"
+clickhouse-driver = "^0.2.8"
 
 
 [build-system]
