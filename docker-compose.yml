@@ -18,13 +18,10 @@ services:
   load_data:
     build: .
     container_name: load_data
-    volumes:
-      - data:/app/data
     networks:
       - my-network
     depends_on:
       - clickhouse
-#    restart: always
 
 
 networks:
