@@ -1,49 +1,26 @@
-import pyarrow as pa
+from datetime import date
 
 
 class WorkWithClickhouse:
-    def create_table(self, client, sql_queries):
-        client.execute(
-            sql_queries,
-        )
+    def create_table(self, cursor, sql_queries):
+        cursor.execute(sql_queries)
+        cursor.fetchall()
 
-    def import_data(self, client, sql_queries):
-        # Import a table
-        table = pa.Table.from_pydict(
-            {
-                "col1": [1, 2, 3],
-                "col2": ["a", "b", "d"],
-            },
-        )
-        client.insert("test", table)
+    def insert_data(self, cursor, table_name, data_dict=None):
+        match table_name:
+            case "products":
+                x = [{'product_id': 123, 'product_name': "test1", 'brand_id': 123, 'seller_id': 1235,
+                      'updated': date.today()},
+                     {'product_id': 124, 'product_name': "test1", 'brand_id': 124, 'seller_id': 1236,
+                      'updated': date.today()}]
+                cursor.executemany(f'INSERT INTO {table_name} (*) VALUES', x)
 
-    def read_table(self, client, sql_queries):
-        # Read into a table
-        table = client.read_table("SELECT * FROM test")
-        print(table)
+            case "remainders":
+                pass
+
+    def select_data(self, cursor, sql_queries):
+        pass
 
 
 clickhouse = WorkWithClickhouse()
 
-# def read_iterator_of_batches(self, client, sql_queries):
-#     # Read iterator of batches
-#     batches = client.read_batches("SELECT * FROM test")
-#     for batch in batches:
-#         print(batch)
-
-# # Use query parameters
-# table = client.read_table(
-#     """
-#     SELECT * FROM test
-#     WHERE col1 = {value:Int64}
-#     """,
-#     params={"value": 2},
-# )
-# print(table)
-#
-# # Use query settings
-# table = client.read_table(
-#     "SELECT col2 FROM test",
-#     settings={"output_format_arrow_string_as_string": 1},
-# )
-# print(table["col2"])

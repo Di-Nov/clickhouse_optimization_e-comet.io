@@ -1,4 +1,4 @@
-create_products = '''CREATE TABLE products
+create_products = '''CREATE TABLE IF NOT EXISTS products
 (
     product_id   Int32,
     product_name String,
@@ -10,7 +10,7 @@ create_products = '''CREATE TABLE products
     ORDER BY product_id;'''
 
 
-create_remainders = '''CREATE TABLE remainders
+create_remainders = '''CREATE TABLE IF NOT EXISTS remainders
 (
     date       Date,
     product_id Int32,
