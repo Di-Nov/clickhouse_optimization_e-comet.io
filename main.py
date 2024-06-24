@@ -2,8 +2,10 @@ import os
 from clickhouse_driver import connect
 from clickhouse_server import clickhouse
 from sql_queries.create_tables import create_products, create_remainders
+from sql_queries.select_queries import init_select_queries
 from dotenv import load_dotenv
 from logger import logger
+from fake_data import data_for_product
 
 load_dotenv()
 
@@ -14,8 +16,9 @@ def main(conn):
     with conn.cursor() as cursor:
         clickhouse.create_table(cursor=cursor, sql_queries=create_products)
         clickhouse.create_table(cursor=cursor, sql_queries=create_remainders)
-
-        clickhouse.insert_data(cursor=cursor, table_name="products")
+        # products = data_for_product(10**5)
+        # clickhouse.insert_data(cursor=cursor, table_name="products", data_dict=products)
+        clickhouse.select_data(cursor=cursor, sql_queries=init_select_queries)
         # print(cursor.rowcount())
 
 
