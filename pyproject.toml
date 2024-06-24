@@ -11,6 +11,7 @@ python = "^3.11"
 faker = "^25.9.1"
 python-dotenv = "^1.0.1"
 clickhouse-driver = "^0.2.8"
+faker-commerce = "^1.0.4"
 
 
 [build-system]

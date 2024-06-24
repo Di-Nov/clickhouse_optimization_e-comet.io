@@ -137,6 +137,20 @@ files = [
 python-dateutil = ">=2.4"
 
 [[package]]
+name = "faker-commerce"
+version = "1.0.4"
+description = "Provider for Faker which adds fake commerce product names, prices, categories and descriptions."
+optional = false
+python-versions = "*"
+files = [
+    {file = "faker-commerce-1.0.4.tar.gz", hash = "sha256:f53da04143ab70754493fa97c0c64f5208c8f8f3c50273516ee3cafcea372953"},
+    {file = "faker_commerce-1.0.4-py3-none-any.whl", hash = "sha256:6780fe30801aac399a64d421cd85c4593f7cd54d838cb400e8d31e463722622c"},
+]
+
+[package.dependencies]
+faker = "*"
+
+[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 description = "Extensions to the standard Python datetime module"
@@ -217,4 +231,4 @@ devenv = ["check-manifest", "pytest (>=4.3)", "pytest-cov", "pytest-mock (>=3.3)
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1a50618b737ab2dd4854c0219cd3179dd02c56cff2e3766200d62ef5ac14a16e"
+content-hash = "3e1900cebadc7aa210697d2ca760b12342eeb66e44f7179b5c19fecd06cca0a1"
