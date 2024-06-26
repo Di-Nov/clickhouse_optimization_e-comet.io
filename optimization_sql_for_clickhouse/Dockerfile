@@ -16,9 +16,12 @@ ENV PYTHONFAULTHANDLER=1 \
 
 RUN pip install poetry && poetry --version
 
-COPY ./poetry.lock ./pyproject.toml ./README.md /app/
+COPY ./poetry.lock ./pyproject.toml /app/
+
 
 RUN poetry install --no-root
+
+COPY  ../.env /app/
 
 COPY  . .
 

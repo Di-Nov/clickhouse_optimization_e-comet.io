@@ -1,6 +1,6 @@
 import time
 import random
-from logger import logger
+from optimization_sql_for_clickhouse.logger import logger
 import functools
 
 
@@ -30,5 +30,6 @@ def n(nums: list[int]) -> list[int]:
     return [x ** 2 for x in nums if x > 0]
 
 
-t(nums_2)
-n(nums_2)
+if __name__ == '__main__':
+    t(nums_2)
+    n(nums_2)

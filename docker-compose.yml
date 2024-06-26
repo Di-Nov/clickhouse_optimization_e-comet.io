@@ -16,7 +16,7 @@ services:
       - my-network
 
   load_data:
-    build: .
+    build: optimization_sql_for_clickhouse/.
     container_name: load_data
     networks:
       - my-network
