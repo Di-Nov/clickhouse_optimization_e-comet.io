@@ -98,6 +98,7 @@ WHERE (updated = today()) AND (date = (today() - 1))'''
 ## <h3 id="t">Установка</h3>
 
 * Скопировать приложение к себе локально git clone https://github.com/Di-Nov/clickhouse_optimization_e-comet.io-.git
+* Замените файлы .env.template и .env.dockerfile на .env, изменив переменные окружения
 * Запустить `make up-ch` (Данной командой запускется база clickhouse)
 * Запустить `make up-ld` (создаются таблицы и загружаются тестовые данные)
 * Джем окончания загрузки тестовых данных 4 минуты (load_data exited with code 0)
