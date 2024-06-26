@@ -1,6 +1,6 @@
-# <img src="https://hh.ru/employer-logo/3910308.png" style="object-fit: cover; width:3%;" > [e-Comet](https://e-comet.io/ "ссылка на сайт") 
+# <img src="https://hh.ru/employer-logo/3910308.png" style="object-fit: cover; width:3%;" > [e-Comet](https://e-comet.io/ "ссылка на сайт")
 
-> Тестовое задание для компании "LESTA GAMES"
+> Тестовое задание для компании "e-Comet"
 
 ## Содержание
 
@@ -14,15 +14,22 @@
 
 ## <h3 id="test">Тестовое задание</h3>
 
-Clickhouse - это крутая высокопроизводительная БД для анализа больших данных. С ней имеет смысл познакомиться, даже если
-ты про нее ранее не слышал.
+1) Python. Функция трансформации T(n: int) -> int выполняется 5 минут. N - список типа int. Требуется вернуть список
+   положительных трансформированных значений N. Предложи решение, которое удовлетворяет следующим критериям:
+
+- в одну строчку
+- эффективно с точки зрения времени выполнения
+- не использует map()
+
+2) Clickhouse - это крутая высокопроизводительная БД для анализа больших данных. С ней имеет смысл познакомиться, даже
+   если
+   ты про нее ранее не слышал.
 
 Даны две таблицы в Clickhouse, в каждой из которых по 100 млн+ строк и возможны дубликаты. Каждый день обновляется около
 1 млн продуктов (то есть на 2 порядка меньше, чем строк в таблице).
 
 ``` SQL
-CREATE TABLE IF NOT EXISTS products
-(
+CREATE TABLE (
     product_id   Int32,
     product_name String,
     brand_id     Int32,
@@ -34,7 +41,7 @@ CREATE TABLE IF NOT EXISTS products
 ```
 
 ``` SQL
-(
+CREATE TABLE    (
     date       Date,
     product_id Int32,
     remainder  Int32,
@@ -53,10 +60,12 @@ CREATE TABLE IF NOT EXISTS products
 секунды :), без изменений архитектуры таблиц (не надо предлагать "добавить индексы") и дающую такой же результат (без
 дубликатов):
 
-'''SELECT DISTINCT product_id
+``` SQL
+SELECT DISTINCT product_id
 FROM products FINAL
 INNER JOIN remainders FINAL USING (product_id)
 WHERE (updated = today()) AND (date = (today() - 1))'''
+```
 
 Несколько хинтов:
 
@@ -78,17 +87,22 @@ WHERE (updated = today()) AND (date = (today() - 1))'''
 
 ## <h3 id="use">Использование</h3>
 
-*В связи с неполной информации тестового задания и неясности понятия "коллекция", параметр IDF выбран случайным
-образом.*
+1) В пакете [python_script_to_first_task](python_script_to_first_task) можно посмотреть и запустить решение для первого
+   задания. Надеюсь задание понял верно.
+2) В пакете [optimization_sql_for_clickhouse](optimization_sql_for_clickhouse) можно посмотреть и запустить решение для
+   пторого задания. При помощи контейнеров докер мы запускаем СУБД clickhouse и после его запуска, запусускается
+   контейнер load_data, который создаст таблицы products и remainders.
+   После создания таблиц load_data создаст тестовые данные и загрузит их в эти таблицы. Нужно подождать окончания
+   создания и загрузки данных. Для остановки загрузки данных нажмите CTRL+C
 
 ## <h3 id="t">Установка</h3>
 
-* Копируем приложение к себе локально git clone https://github.com/Di-Nov/clickhouse_optimization_e-comet.io-.git
-* Запускаем через Docker командой `make up` (Данной комеадой запускется база clickhouse, создаются таблицы и загружаются
-  тестовые данные)
+* Скопировать приложение к себе локально git clone https://github.com/Di-Nov/clickhouse_optimization_e-comet.io-.git
+* Запустить `make up-ch` (Данной командой запускется база clickhouse)
+* Запустить `make up-ld` (создаются таблицы и загружаются тестовые данные)
 * Джем окончания загрузки тестовых данных 4 минуты.
-* Заходим в контейнер clickhouse `docker exec -it clickhouse clickhouse-client`
-* Выполняем базовый запрос:
+* Прописать в терминале `docker exec -it clickhouse clickhouse-client` (Заходим в контейнер clickhouse)
+* Выполнить базовый запрос в терминале:
 
 ``` SQL
 SELECT DISTINCT product_id
@@ -97,7 +111,7 @@ INNER JOIN remainders FINAL USING (product_id)
 WHERE (updated = today()) AND (date = (today() - 1));
 ```
 
-* Выполняем Оптимизированный запрос:
+* Выполняем оптимизированный запрос:
 
 ``` SQL
 SELECT product_id
@@ -111,9 +125,19 @@ WHERE (product_id IN ((
 
 ## <h3 id="conclusions">Выводы</h3>
 
+### Функция трансормации.
+
+Предположу что тут можно использовать list comprehension. На примере
+приложения [func.py](python_script_to_first_task%2Ffunc.py) можно увидеть что данное решение выполняется быстрее
+встроенной фильтрацие filter и преобразования map, при использовании lambda функции
+
+![img.png](optimization_sql_for_clickhouse/images/img.png)
+
+### Оптимизация SQL в clickhouse.
+
 1) Каждый раз для выполнения запроса с одинаковым JOIN, подзапрос выполняется заново — результат не кэшируется. правая
-таблица читается заново при каждом запросе. Поэтому используем вложенный запрос и IN.
-Так как clickhouse столбцовая СУБД, нам не нужна информация из других столбцов, достаточно только product_id
+   таблица читается заново при каждом запросе. Поэтому используем вложенный запрос и IN.
+   Так как clickhouse столбцовая СУБД, нам не нужна информация из других столбцов, достаточно только product_id
 
 2) Запросы, которые используют FINAL выполняются немного медленее, чем аналогичные запросы без него, потому что:
 
