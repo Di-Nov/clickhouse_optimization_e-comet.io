@@ -20,16 +20,16 @@ nums_2 = [random.randrange(-100, 100) for _ in range(10 ** 7)]
 
 
 @time_meter
-def t(nums: list[int]) -> list[int]:
+def map_filter_func(nums: list[int]) -> list[int]:
     result = list(map(lambda x: x ** 2, filter(lambda x: x > 0, nums)))
     return result
 
 
 @time_meter
-def n(nums: list[int]) -> list[int]:
+def list_comprehension_func(nums: list[int]) -> list[int]:
     return [x ** 2 for x in nums if x > 0]
 
 
 if __name__ == '__main__':
-    t(nums_2)
-    n(nums_2)
+    map_filter_func(nums_2)
+    list_comprehension_func(nums_2)
