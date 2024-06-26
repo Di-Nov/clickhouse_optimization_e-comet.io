@@ -100,8 +100,8 @@ WHERE (updated = today()) AND (date = (today() - 1))'''
 * Скопировать приложение к себе локально git clone https://github.com/Di-Nov/clickhouse_optimization_e-comet.io-.git
 * Запустить `make up-ch` (Данной командой запускется база clickhouse)
 * Запустить `make up-ld` (создаются таблицы и загружаются тестовые данные)
-* Джем окончания загрузки тестовых данных 4 минуты.
-* Прописать в терминале `docker exec -it clickhouse clickhouse-client` (Заходим в контейнер clickhouse)
+* Джем окончания загрузки тестовых данных 4 минуты (load_data exited with code 0)
+* Прописать в терминале  `docker exec -it clickhouse clickhouse-client` (Заходим в контейнер clickhouse)
 * Выполнить базовый запрос в терминале:
 
 ``` SQL
@@ -110,6 +110,8 @@ FROM products FINAL
 INNER JOIN remainders FINAL USING (product_id)
 WHERE (updated = today()) AND (date = (today() - 1));
 ```
+У меня получился такой результат, у Вас может быть другой, так как тестовые данные разные.
+![img.png](optimization_sql_for_clickhouse/images/img2.png)
 
 * Выполняем оптимизированный запрос:
 
@@ -123,6 +125,9 @@ WHERE (product_id IN ((
 ) AS remainders_products_id)) AND (updated = today());
 ```
 
+Запрос выполнился значительно быстрее. При бо'льших объемах данных разница в скорости выполнения увеличивается. 
+![img.png](optimization_sql_for_clickhouse/images/img3.png)
+
 ## <h3 id="conclusions">Выводы</h3>
 
 #### Функция трансормации.
@@ -133,13 +138,13 @@ WHERE (product_id IN ((
 
 ![img.png](optimization_sql_for_clickhouse/images/img.png)
 
-### Оптимизация SQL в clickhouse.
+#### Оптимизация SQL в clickhouse.
 
 1) Каждый раз для выполнения запроса с одинаковым JOIN, подзапрос выполняется заново — результат не кэшируется. правая
    таблица читается заново при каждом запросе. Поэтому используем вложенный запрос и IN.
    Так как clickhouse столбцовая СУБД, нам не нужна информация из других столбцов, достаточно только product_id
 
-2) Запросы, которые используют FINAL выполняются немного медленее, чем аналогичные запросы без него, потому что:
+2) Запросы, которые используют FINAL выполняются немного медленнее, чем аналогичные запросы без него, потому что:
 
 Данные мёржатся во время выполнения запроса в памяти, и это не приводит к физическому мёржу кусков на дисках.
 Запросы с модификатором FINAL читают столбцы первичного ключа в дополнение к столбцам, используемым в запросе.
@@ -157,5 +162,5 @@ WHERE (product_id IN ((
 
 ## <h3 id="team">Команда проекта</h3>
 
-Новожилов Дмитрий — Backend Engineer <br>
+Новожилов Дмитрий — Backend Developer <br>
 novozhilov812@gmail.com
