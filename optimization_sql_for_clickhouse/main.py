@@ -22,10 +22,10 @@ def main(conn):
     with conn.cursor() as cursor:
         create_table(cursor=cursor, sql_queries=create_products)
         create_table(cursor=cursor, sql_queries=create_remainders)
-        # products = create_data_for_product(10 ** 6)
-        # insert_data(cursor=cursor, table_name="products", data_dict=products)
-        # remainders = create_data_for_remainders(10 ** 6)
-        # insert_data(cursor=cursor, table_name="remainders", data_dict=remainders)
+        products = create_data_for_product(10 ** 6)
+        insert_data(cursor=cursor, table_name="products", data_dict=products)
+        remainders = create_data_for_remainders(10 ** 6)
+        insert_data(cursor=cursor, table_name="remainders", data_dict=remainders)
 
 
 if __name__ == '__main__':
