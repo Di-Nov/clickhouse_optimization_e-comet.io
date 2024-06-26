@@ -9,7 +9,7 @@
 * [Использование](#use)
 * [Установка](#t)
 * [Выводы](#conclusions)
-* [feedback](#contr)
+* [Feedback](#feedback)
 * [Команда проекта](#team)
 
 ## <h3 id="test">Тестовое задание</h3>
