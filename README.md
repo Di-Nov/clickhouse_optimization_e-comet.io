@@ -1,6 +1,4 @@
-# [e-Comet](https://e-comet.io/ "ссылка на сайт")
-
-<img src="https://hh.ru/employer-logo/3910308.png" style="object-fit: cover; width:10%;" >
+# <img src="https://hh.ru/employer-logo/3910308.png" style="object-fit: cover; width:3%;" > [e-Comet](https://e-comet.io/ "ссылка на сайт") 
 
 > Тестовое задание для компании "LESTA GAMES"
 
