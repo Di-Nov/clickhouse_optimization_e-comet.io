@@ -61,10 +61,10 @@ CREATE TABLE    (
 дубликатов):
 
 ``` SQL
-SELECT DISTINCT product_id
-FROM products FINAL
-INNER JOIN remainders FINAL USING (product_id)
-WHERE (updated = today()) AND (date = (today() - 1))'''
+SELECT product_id
+FROM products FINAL 
+JOIN remainders FINAL USING(product_id) 
+WHERE updated=today() AND date=today()-1
 ```
 
 Несколько хинтов:
@@ -106,11 +106,12 @@ WHERE (updated = today()) AND (date = (today() - 1))'''
 * Выполнить базовый запрос в терминале:
 
 ``` SQL
-SELECT DISTINCT product_id
-FROM products FINAL
-INNER JOIN remainders FINAL USING (product_id)
-WHERE (updated = today()) AND (date = (today() - 1));
+SELECT product_id
+FROM products FINAL 
+JOIN remainders FINAL USING(product_id) 
+WHERE updated=today() AND date=today()-1
 ```
+
 У меня получился такой результат, у Вас может быть другой, так как тестовые данные разные.
 ![img.png](optimization_sql_for_clickhouse/images/img2.png)
 
@@ -118,15 +119,15 @@ WHERE (updated = today()) AND (date = (today() - 1));
 
 ``` SQL
 SELECT product_id
-FROM products
-WHERE (product_id IN ((
+FROM products FINAL
+WHERE product_id IN (
     SELECT product_id
     FROM remainders
     WHERE date = yesterday()
-) AS remainders_products_id)) AND (updated = today());
+) AND updated = today();
 ```
 
-Запрос выполнился значительно быстрее. При бо'льших объемах данных разница в скорости выполнения увеличивается. 
+Запрос выполнился значительно быстрее. При бо'льших объемах данных разница в скорости выполнения увеличивается.
 ![img.png](optimization_sql_for_clickhouse/images/img3.png)
 
 ## <h3 id="conclusions">Выводы</h3>
@@ -135,17 +136,21 @@ WHERE (product_id IN ((
 
 Предположу что тут можно использовать list comprehension. На примере
 приложения [func.py](python_script_to_first_task%2Ffunc.py) можно увидеть что данное решение выполняется быстрее
-встроенной фильтрацие filter и преобразования map, при использовании lambda функции
+встроенной фильтрации filter и преобразования map, при использовании lambda функции
 
 ![img.png](optimization_sql_for_clickhouse/images/img.png)
 
 #### Оптимизация SQL в clickhouse.
 
-1) Каждый раз для выполнения запроса с одинаковым JOIN, подзапрос выполняется заново — результат не кэшируется. правая
+1) при выполнении запроса происходит полное объединение таблиц по product_id, а затем фильтрация результатов.
+   Значит при большом количестве строк, все они будут объединяться до фильтрации
+
+2) Каждый раз для выполнения запроса с одинаковым JOIN, подзапрос выполняется заново — результат не кэшируется. правая
    таблица читается заново при каждом запросе. Поэтому используем вложенный запрос и IN.
    Так как clickhouse столбцовая СУБД, нам не нужна информация из других столбцов, достаточно только product_id
 
-2) Запросы, которые используют FINAL выполняются немного медленнее, чем аналогичные запросы без него, потому что:
+3) По информации из документации, запросы, которые используют FINAL выполняются немного медленнее, чем аналогичные
+   запросы без него, потому что:
 
 Данные мёржатся во время выполнения запроса в памяти, и это не приводит к физическому мёржу кусков на дисках.
 Запросы с модификатором FINAL читают столбцы первичного ключа в дополнение к столбцам, используемым в запросе.
